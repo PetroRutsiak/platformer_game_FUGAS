@@ -10,13 +10,17 @@ public class Hero : MonoBehaviour
     [SerializeField] private float jumpForce = 15f; 
     
     private bool isGrounded = false;
-
+     
     public Joystick joystick;
 
+    private float moveInput;    
     private Vector3 respawmPoint;
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
+    private bool facingright = true;
     public GameObject fallDetector;
+    public float normalspeed;
+
 
     private void Start()
     {
@@ -28,25 +32,37 @@ public class Hero : MonoBehaviour
     
     private void FixedUpdate()
     {
-        CheckGround();
+        moveInput = joystick.Horizontal;
+
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        
+        if(facingright == false &&  moveInput  > 0)
+        {
+            Flip();
+        }
+        else if(facingright == true &&  moveInput  < 0)
+        {
+            Flip();
+        }
+
+       
     }
 
     private void Update()
     {
         
-        if (Input.GetButton("Horizontal"))
-            Run();
-        if (isGrounded && Input.GetButtonDown("Jump"))
+       CheckGround();
+        
+          if (isGrounded && Input.GetButtonDown("Jump"))
             Jump();
     }
 
-    private void Run()
+    void Flip()
     {
-        Vector3 dir = transform.right * Input.GetAxis("Horizontal");
-
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, speed * Time.deltaTime);
-
-        sprite.flipX = dir.x < 0.0f;
+        facingright =! facingright;
+        Vector3 Scaler = transform.localScale;
+        Scaler.x *= -1;
+        transform.localScale = Scaler;
     }
 
     private void Jump()
@@ -60,22 +76,7 @@ public class Hero : MonoBehaviour
         isGrounded = collider.Length > 1;
     }
 
-    private void OnCollisionEnter(Collision collision) 
-    {
-        if(collision.gameObject.name.Equals("Platform"))
-        { 
-            this.transform.parent = collision.transform;
-        }
-
-    }
-
-    private void OnCollisionExit2D(Collision2D collision) 
-    {
-        if(collision.gameObject.name.Equals("Platform"))
-        { 
-            this.transform.parent = null;
-        }
-    }
+    
 
     void OnTriggerEnter2D(Collider2D collision) 
     {
