@@ -1,19 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CoinPicker : MonoBehaviour
 {
-    public float coins;
-    public TMP_Text coinsText;
+    public int coin;
+    public Text coinT;
     private void OnTriggerEnter2D(Collider2D coll)
+
     {
 
         if(coll.gameObject.tag == "Coin")
         {
-            coins += 1;
-            coinsText.text = coins.ToString(); 
+            coin += 1;
+            coinT.text = coin.ToString(); 
             Destroy (coll.gameObject);
         }
     }
