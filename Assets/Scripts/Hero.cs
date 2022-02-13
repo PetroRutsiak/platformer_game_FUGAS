@@ -7,20 +7,21 @@ public class Hero : MonoBehaviour
 {
     [SerializeField] private float speed = 3f; 
     [SerializeField] private int lives = 5; 
-    [SerializeField] private float jumpForce = 15f; 
+    [SerializeField] private float jumpForce = 5f; 
     
-    private bool isGrounded = false;
+    private bool isGrounded = true;
      
     public Joystick joystick;
 
-    private float moveInput;    
     private Vector3 respawmPoint;
     private Rigidbody2D rb;
     private SpriteRenderer sprite;
-    private bool facingright = true;
     public GameObject fallDetector;
-    public float normalspeed;
+    public float horizontalspeed;
+    private float moveInput;
+    private bool facingright = true;
 
+   
 
     private void Start()
     {
@@ -33,9 +34,7 @@ public class Hero : MonoBehaviour
     private void FixedUpdate()
     {
         moveInput = joystick.Horizontal;
-
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-        
         if(facingright == false &&  moveInput  > 0)
         {
             Flip();
@@ -44,17 +43,15 @@ public class Hero : MonoBehaviour
         {
             Flip();
         }
-
-       
+        CheckGround();
     }
 
     private void Update()
     {
         
-       CheckGround();
+       if (Input.GetButton("Horizontal"))
+            Run();
         
-          if (isGrounded && Input.GetButtonDown("Jump"))
-            Jump();
     }
 
     void Flip()
@@ -65,18 +62,38 @@ public class Hero : MonoBehaviour
         transform.localScale = Scaler;
     }
 
-    private void Jump()
+    void Jump()
     {
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
     private void CheckGround()
     {
-        Collider2D[] collider = Physics2D.OverlapCircleAll(transform.position, 0.5f);
-        isGrounded = collider.Length > 1;
+        Collider2D[] collider = Physics2D.OverlapCircleAll(transform.position, 1f);
+        isGrounded = collider.Length > 0.5;
+       
     }
 
-    
+     private void Run()
+    {
+        Vector3 dir = transform.right * Input.GetAxis("Horizontal");
+
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, speed * Time.deltaTime);
+
+        sprite.flipX = dir.x < 0.0f;
+    }
+
+    public void onJumpButtonDown()
+    {
+        if(isGrounded == true)
+        {
+            rb.velocity = Vector2.up * jumpForce;
+        }
+        else
+        {
+            rb.velocity = Vector2.up;
+        }
+    }
 
     void OnTriggerEnter2D(Collider2D collision) 
     {
