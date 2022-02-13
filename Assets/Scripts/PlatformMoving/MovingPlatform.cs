@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    [SerializeField] private int leftYmove;
-    [SerializeField] private int rightYmove;
+    [SerializeField] private float updot;
+    [SerializeField] private float downdot;
+    [SerializeField] private float speed;
+
     float dirY;
     float dirX = 0;
-    float speed = 2f;
+    
 
     bool movingUp = true;
 
@@ -16,11 +18,11 @@ public class MovingPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.position.y >= leftYmove)
+        if(transform.position.y >= updot)
         {
             movingUp = false;
         }
-        else if (transform.position.y <= rightYmove)
+        else if (transform.position.y <= downdot)
         {
             movingUp = true;
         }

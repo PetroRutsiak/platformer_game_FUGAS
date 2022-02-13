@@ -43,7 +43,7 @@ public class Hero : MonoBehaviour
         {
             Flip();
         }
-        CheckGround();
+        
     }
 
     private void Update()
@@ -51,6 +51,8 @@ public class Hero : MonoBehaviour
         
        if (Input.GetButton("Horizontal"))
             Run();
+
+        CheckGround();
 
     }
 

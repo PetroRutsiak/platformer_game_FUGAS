@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class LeftRightPlatform : MonoBehaviour
 {
+    [SerializeField] private float rightYmove;
+    [SerializeField] private float leftYmove;
+    [SerializeField] private float speed;
+    
     float dirX;
-    float speed = 1f;
+    
 
     bool movingRight = true;
 
@@ -13,11 +17,11 @@ public class LeftRightPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.position.x > 1f)
+        if(transform.position.x > leftYmove)
         {
             movingRight = false;
         }
-        else if (transform.position.x < 1f)
+        else if (transform.position.x < rightYmove)
         {
             movingRight = true;
         }

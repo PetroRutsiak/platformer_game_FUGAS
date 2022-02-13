@@ -7,6 +7,22 @@ public class CoinPicker : MonoBehaviour
 {
     public int coin;
     public Text coinT;
+
+    private void Awake() 
+    {
+        if(!PlayerPrefs.HasKey("Coin"))
+        {
+            PlayerPrefs.SetInt("Coin", 0);
+        }
+    }
+    
+    void Start() 
+    {
+        coin = PlayerPrefs.GetInt("Coin");
+        coinT.text = coin.ToString();
+    }
+
+
     private void OnTriggerEnter2D(Collider2D coll)
 
     {
@@ -16,6 +32,7 @@ public class CoinPicker : MonoBehaviour
             coin += 1;
             coinT.text = coin.ToString(); 
             Destroy (coll.gameObject);
+            PlayerPrefs.SetInt("Coin", coin );
         }
     }
    
