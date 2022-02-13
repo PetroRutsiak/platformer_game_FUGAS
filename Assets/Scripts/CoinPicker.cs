@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CoinPicker : MonoBehaviour
 {
-    private float coins = 0;
+    public float coins;
     public TMP_Text coinsText;
     private void OnTriggerEnter2D(Collider2D coll)
     {
@@ -17,6 +17,5 @@ public class CoinPicker : MonoBehaviour
             Destroy (coll.gameObject);
         }
     }
-
-    
+   
 }
